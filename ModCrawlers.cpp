@@ -28,7 +28,6 @@ void ModCrawlers::update(PixelBuffer &pb) {
 
     for (int16_t crawler = 0; crawler < nCrawlers; crawler++) {
         int16_t i = (crawler * offset + counter_scaled);
-
         i -= nLEDs * (i >= nLEDs);
         i += nLEDs * (i < 0);
 

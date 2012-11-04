@@ -27,7 +27,7 @@ private:
     float phasor_b;
     float counter;
     int16_t nLEDs;
-    static const float MAX_BRIGHTNESS = 128.0f;
+    static const float MAX_BRIGHTNESS = 10.0f;
 };
 
 #endif
