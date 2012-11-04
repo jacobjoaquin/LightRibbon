@@ -11,11 +11,11 @@ public:
     ~ModCrawlers();
     void update(PixelBuffer &pb_);
     uint16_t length;
-    int inc;
-    int offset;
+    float inc;
     float rate_r;
     float rate_g;
     float rate_b;
+    int nCrawlers;
 
 private:
     static const uint8_t N_COLORS = 3;
@@ -24,8 +24,8 @@ private:
     float phasor_r;
     float phasor_g;
     float phasor_b;
-    int16_t counter;
-    int nLEDs;
+    float counter;
+    int16_t nLEDs;
     static const float MAX_BRIGHTNESS = 128.0f;
 };
 
