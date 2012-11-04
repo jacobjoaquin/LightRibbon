@@ -3,6 +3,7 @@
 
 #include "SPI.H"
 #include "PixelBuffer.h"
+#include "Gradient.h"
 
 class ModCrawlers
 {
@@ -12,19 +13,14 @@ public:
     void update(PixelBuffer &pb_);
     uint16_t length;
     float inc;
-    float rate_r;
-    float rate_g;
-    float rate_b;
     int nCrawlers;
     int offset;
+    Gradient *gradient;
 
 private:
     static const uint8_t N_COLORS = 3;
 
     uint8_t *table; 
-    float phasor_r;
-    float phasor_g;
-    float phasor_b;
     float counter;
     int16_t nLEDs;
     static const float MAX_BRIGHTNESS = 10.0f;
