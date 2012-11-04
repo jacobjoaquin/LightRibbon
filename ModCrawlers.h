@@ -16,6 +16,7 @@ public:
     float rate_g;
     float rate_b;
     int nCrawlers;
+    int offset;
 
 private:
     static const uint8_t N_COLORS = 3;

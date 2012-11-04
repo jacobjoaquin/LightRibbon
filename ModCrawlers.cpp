@@ -13,12 +13,12 @@ ModCrawlers::ModCrawlers(int nLEDs_, uint8_t *table_) {
     nLEDs = nLEDs_;
     length = 12;
     nCrawlers = 1;
+    offset = 80;
 }
 
 ModCrawlers::~ModCrawlers() {}
 
 void ModCrawlers::update(PixelBuffer &pb) {
-    int offset = nLEDs / nCrawlers;
     float length_inv = 1.0f / (float) length;
     int16_t phr = phasor_r * MAX_BRIGHTNESS;
     int16_t phg = phasor_g * MAX_BRIGHTNESS;
