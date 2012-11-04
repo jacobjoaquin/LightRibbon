@@ -7,7 +7,7 @@ ModCrawlers::ModCrawlers(int nLEDs_, uint8_t *table_) {
     rate_r = 0.01f;
     rate_g = 0.012f;
     rate_b = 0.015f;
-    counter = 0;
+    counter = 120;
     offset = 80;
     inc = 1;
     table = table_;
@@ -15,32 +15,37 @@ ModCrawlers::ModCrawlers(int nLEDs_, uint8_t *table_) {
     length = 12;
 }
 
-ModCrawlers::~ModCrawlers() {
-    // Nothing to do
-}
+ModCrawlers::~ModCrawlers() {}
 
 void ModCrawlers::update(PixelBuffer &pb) {
-    pb.clear();
+    int nCrawlers = nLEDs / offset;
+    float length_inv = 1.0f / (float) length;
+    int16_t phr = phasor_r * MAX_BRIGHTNESS;
+    int16_t phg = phasor_g * MAX_BRIGHTNESS;
+    int16_t phb = phasor_b * MAX_BRIGHTNESS;
+    int16_t tail_direction = inc > 0 ? -1 : 1;
 
-    for (int i = 0; i < nLEDs; i++) {
-        if (!((i + counter) % offset)) {
-            for (int j = 0; j < length; j++) {
-                uint8_t ij = i + j;
-                uint8_t t = ij;
+    for (int16_t crawler = 0; crawler < nCrawlers; crawler++) {
+        int16_t i = (crawler * offset + counter);
 
-                t -= nLEDs * (t >= nLEDs);
-                t += nLEDs * (t < 0);
-                
-                float r = table[(((uint8_t) (phasor_r * MAX_BRIGHTNESS)) + ij) % 128];
-                float g = table[(((uint8_t) (phasor_g * MAX_BRIGHTNESS)) + ij) % 128];
-                float b = table[(((uint8_t) (phasor_b * MAX_BRIGHTNESS)) + ij) % 128];
-                float fade = (float) (length - j) / (float) (length);
-                uint16_t index = t * N_COLORS;
+        i -= nLEDs * (i >= nLEDs);
+        i += nLEDs * (i < 0);
 
-                pb.buffer[index] = (uint8_t) (r * fade);
-                pb.buffer[++index] = (uint8_t) (g * fade);
-                pb.buffer[++index] = (uint8_t) (b * fade);
-            }
+        for (int16_t j = 0; j < length; j++) {
+            int16_t t = i + j * tail_direction;
+
+            t -= nLEDs * (t >= nLEDs);
+            t += nLEDs * (t < 0);
+  
+            float r = table[(phr + t) % 128];
+            float g = table[(phg + t) % 128];
+            float b = table[(phb + t) % 128];
+            float fade = (float) (length - j) * length_inv;
+            uint16_t index = t * N_COLORS;
+
+            pb.buffer[index] = (uint8_t) (r * fade);
+            pb.buffer[++index] = (uint8_t) (g * fade);
+            pb.buffer[++index] = (uint8_t) (b * fade);
         }
     }
 
