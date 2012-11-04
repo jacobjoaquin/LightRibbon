@@ -7,12 +7,16 @@ Gradient::Gradient() {
     r1 = 0.0f;
     g1 = 0.0f;
     b1 = 1.0f;
+    offset = 0.0f;
 }
 
 void Gradient::fillPixelBuffer(PixelBuffer &pb) {}
 
 void Gradient::putPixel(PixelBuffer &pb, uint16_t c, float x) {
     c *= pb.N_COLORS;
+    x += offset;
+    x -= 1.0f * (x >= 1.0);
+    x += 1.0f * (x < 0.0f);
     float f = 1.0f - x;
     float r = (r0 * f + r1 * x) * 127.0f;
     float g = (g0 * f + g1 * x) * 127.0f;
