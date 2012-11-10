@@ -10,7 +10,25 @@ Gradient::Gradient() {
     offset = 0.0f;
 }
 
-void Gradient::fillPixelBuffer(PixelBuffer &pb) {}
+void Gradient::fillPixelBuffer(PixelBuffer &pb) {
+    uint16_t length = pb.length;
+    float length_inv = 1.0f / (float) length;
+    uint16_t n_colors = pb.N_COLORS;
+
+    for (uint16_t i = 0; i < length; i++) {
+        uint16_t c = i * n_colors;
+
+        float x = (float) i * length_inv;
+        x += offset;
+        x -= 1.0f * (x >= 1.0f);
+        x += 1.0f * (x < 0.0f);
+        float f = 1.0f - x;
+
+        pb.buffer[c] = (uint8_t) ((r0 * f + r1 * x) * 127.0f);
+        pb.buffer[++c] = (uint8_t) ((g0 * f + g1 * x) * 127.0f);
+        pb.buffer[++c] = (uint8_t) ((b0 * f + b1 * x) * 127.0f);
+    }
+}
 
 void Gradient::putPixel(PixelBuffer &pb, uint16_t c, float x) {
     c *= pb.N_COLORS;
